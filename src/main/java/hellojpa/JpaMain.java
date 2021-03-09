@@ -21,27 +21,19 @@ public class JpaMain {
         tx.begin();
 
         try {
+
+            // 비영속
             Member member = new Member();
+            member.setId(100L);
+            member.setName("HelloJPA");
 
-//            member.setId(2L);
-//            member.setName("HelloJPA");
+            // 영속
+            System.out.println("=== BEFORE ===");
+            entityManager.persist(member);
+            System.out.println("=== AFTER ===");
 
-//            Member findMember = entityManager.find(Member.class, 2L);
-//
-//            System.out.println("id: " + findMember.getId());
-//            System.out.println("name: " + findMember.getName());
-
-//            entityManager.persist(member);
-
-            List<Member> result = entityManager.createQuery("select m from Member as m", Member.class)
-                    .getResultList();
-
-            for (Member m : result) {
-                System.out.println("member.name = " + m.getName());
-            }
-
-
-            tx.commit();
+            // 트랜잭션이 커밋 될때 영속성 컨텍스트에서 DB 에 쿼리가 전달된다.
+           tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
